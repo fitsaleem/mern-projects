@@ -1,17 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
-// import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 
 
-  // dotenv.config();
+  dotenv.config();
 
-mongoose.connect("mongodb+srv://fitsaleem:fitsaleem@cluster0.byc6obh.mongodb.net/fit?retryWrites=true")
-.then(()=>{
-    console.log("Database connected");
-})
-.catch((err)=>{
+  mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDb is connected');
+  })
+  .catch((err) => {
     console.log(err);
-});
+  });
 
 
 
@@ -38,9 +39,9 @@ const app= express();
 
 
 
+const PORT = process.env.PORT || 3000;
 
-
-app.listen(3000 , () => {
+app.listen(PORT , () => {
     console.log("Server is running on port 3000");
 
 });
