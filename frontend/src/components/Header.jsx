@@ -4,6 +4,8 @@
 import { Button, Navbar, TextInput } from 'flowbite-react';
 import { Link , useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
+import { LuSunMoon } from "react-icons/lu";
+
 
 
 
@@ -26,8 +28,13 @@ function Header() {
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
            <CiSearch/>
         </Button>
+
+      
         
         <div  className='flex gap-2 md:order-2'>
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
+            <LuSunMoon />
+        </Button>
         <Link to='/sign-in'>
             <Button gradientDuoTone='purpleToBlue' outline>
               Sign In
