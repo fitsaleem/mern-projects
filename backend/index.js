@@ -22,11 +22,12 @@ import userRoutes from "./routes/user.routes.js";
 const app= express();
 
 
-
+// Add body middleware
+app.use(express.json());
 
 // create routes
 
-app.use("/api/user", userRoutes);
+app.use("/api", userRoutes);
 
 
 

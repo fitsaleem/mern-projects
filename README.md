@@ -29,3 +29,12 @@ mongodb+srv://<username>:<password>@cluster0.byc6obh.mongodb.net/?retryWrites=tr
 
 npm i dotenv
 
+# api testing 
+
+for api testing you can use postman api or also you can use Insomnia
+
+# for hashing password use bcrypt.js in Node.js :
+
+npm install bcryptjs
+
+
