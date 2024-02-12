@@ -10,3 +10,15 @@
 
 npm install react-icons --save
 
+# add proxeyon vite.config.js file when you will use fatch api method
+
+server :{
+    proxy: {
+      '/api' :{
+        target: 'http://localhost:3000',
+        secure : false,
+      },
+    },
+  },
+
+  
