@@ -11,7 +11,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   function handleChange(e) {
-    setUserData({ ...userData, [e.target.id]: e.target.value });
+    setUserData({ ...userData, [e.target.id]: e.target.value.trim() });
   }
 
   const handleSubmit = async (e) => {
@@ -24,7 +24,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       setMessageError(null);
-      const res = await fetch("api/signup", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

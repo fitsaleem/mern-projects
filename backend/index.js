@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
-import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 
   dotenv.config();
@@ -22,12 +22,9 @@ import userRoutes from "./routes/user.routes.js";
 const app= express();
 
 
-// Add body middleware
+// Add  middleware
 app.use(express.json());
-
-// create routes
-
-app.use("/api", userRoutes);
+app.use("/api/auth", authRoutes);
 
 
 
