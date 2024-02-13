@@ -3,12 +3,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Spinner, Alert } from "flowbite-react";
 import { useState } from "react";
+import { signInStart, signInSuccess ,signInFailure } from "../redux/user/userSlice";
+import { useDispatch, useSelector} from "react-redux";
 
 const SignUp = () => {
   const [userData, setUserData] = useState({});
-  const [messageError, setMessageError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // const [messageError, setMessageError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const {loading, messageError} = useSelector(state => state.user);
+
 
   function handleChange(e) {
     setUserData({ ...userData, [e.target.id]: e.target.value.trim() });
@@ -18,12 +25,18 @@ const SignUp = () => {
     e.preventDefault();
 
     if (!userData.email || !userData.password) {
-      return setMessageError("Please fill out all fields.");
+        return dispatch(signInFailure("Please fill out all fields."));
+      // return setMessageError("Please fill out all fields.");
     }
 
+    if (userData.password.length < 6) {
+      return dispatch(signInFailure("Password must be at least 6 characters long."));
+    }   
+
     try {
-      setLoading(true);
-      setMessageError(null);
+      dispatch(signInStart());
+      // setLoading(true);
+      // setMessageError(null);
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -32,18 +45,21 @@ const SignUp = () => {
         body: JSON.stringify(userData),
       });
       const data = await res.json();
-      if (!data.success) {
-        setMessageError(data.message);
+      if (data.success === false) {
+        dispatch(signInFailure(data.message));
+        // setMessageError(data.message);
       }
       if(res.ok) {
-        navigate('/home');
+        dispatch(signInSuccess(data));
+        navigate('/');
       }
-
-      setLoading(false);
+        
+      dispatch(signInFailure(data.message));
 
     } catch (error) {
-      setMessageError("Internal server error");
-      setLoading(false);
+      dispatch(signInFailure(error.message));
+      // setMessageError("Internal server error");
+      // setLoading(false);
     }
   };
 
