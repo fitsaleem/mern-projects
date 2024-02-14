@@ -98,3 +98,55 @@ export const signin = async (req, res) => {
     });
   }
 };
+
+
+export const google = async (req, res) => {
+
+  const { name, email, googlePhotoUrl } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET);
+
+      const { password: userPassword, ...rest } = existingUser._doc;
+
+      return res
+        .status(200)
+        .cookie('access_token', token, {
+          httpOnly: true,
+        })
+        .json({
+          message: "User logged in successfully",
+          ...rest
+        });
+    }
+
+    const newUser = new User({
+      username: name,
+      email,
+      googlePhotoUrl,
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+    const { password: userPassword, ...rest } = newUser._doc;
+
+    return res
+      .status(201)
+      .cookie('access_token', token, {
+        httpOnly: true,
+      })
+      .json({
+        message: "User created successfully",
+        ...rest
+      });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}

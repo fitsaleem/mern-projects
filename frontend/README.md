@@ -21,4 +21,6 @@ server :{
     },
   },
 
-  
+# for google oauth we will use firebase
+
+npm install firebase
