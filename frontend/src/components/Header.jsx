@@ -1,10 +1,13 @@
 
 'use client';
 
-import { Button, Navbar, TextInput } from 'flowbite-react';
+import { Button, Navbar, TextInput , Dropdown ,Avatar } from 'flowbite-react';
 import { Link , useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
 import { LuSunMoon } from "react-icons/lu";
+import { HiCog,  HiLogout, HiViewGrid , HiUser } from 'react-icons/hi';
+
+import { useSelector} from "react-redux";
 
 
 
@@ -12,6 +15,9 @@ import { LuSunMoon } from "react-icons/lu";
 function Header() {
 
   const path = useLocation().pathname;
+  const {currentUser} = useSelector((state) => state.user);
+
+
   return (
     <Navbar className=' border-b-2'>
       <Link to={"/"} className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
@@ -35,11 +41,32 @@ function Header() {
         <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
             <LuSunMoon />
         </Button>
-        <Link to='/sign-in'>
+        {
+          currentUser ? (
+            <Dropdown arrowIcon={false}
+            inline
+            label={
+              <Avatar alt='user' img={currentUser.profilePicture} rounded />
+            }>
+            <Dropdown.Header>
+              <span className="block text-sm">{currentUser.username}</span>
+              <span className="block truncate text-sm font-medium">{currentUser.email}</span>
+            </Dropdown.Header>
+            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
+            <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+            <Dropdown.Item icon={HiUser}>Profile</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+          </Dropdown>
+          ) : (
+            <Link to='/sign-in'>
             <Button gradientDuoTone='purpleToBlue' outline>
               Sign In
             </Button>
           </Link>
+          )
+        }
+       
           <Navbar.Toggle />
         </div>
         
