@@ -19,11 +19,19 @@ export const signup = async (req, res) => {
         }
 
 
-    const exestingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const exestingUser = await User.findOne({ email  });
 
     if (exestingUser) {
       return res.status(400).json({
         message: "User already exists",
+      });
+    }
+
+    const existingUsername = await User.findOne({ username});
+
+    if (existingUsername) {
+      return res.status(400).json({
+        message: "please choose another username", 
       });
     }
 
@@ -121,21 +129,24 @@ export const google = async (req, res) => {
           message: "User logged in successfully",
           ...rest
         });
-    }
+    }else{
+      const generatedPassword = Math.random().toString(36).slice(-8)+
+      Math.random().toString(36).slice(-8);
 
-    const newUser = new User({
-      username: name,
-      email,
-      googlePhotoUrl,
-    });
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
 
-    await newUser.save();
+      const newUser = new User({
+        username: name.toLowerCase().split(' ').join('')+Math.random().toString(9).slice(-4),
+        email,
+        password: hashedPassword,
+        profilePicture: googlePhotoUrl,
+      });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      await newUser.save();
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
 
-    const { password: userPassword, ...rest } = newUser._doc;
-
-    return res
+      const { password: userPassword, ...rest } = newUser._doc;
+      return res
       .status(201)
       .cookie('access_token', token, {
         httpOnly: true,
@@ -144,6 +155,8 @@ export const google = async (req, res) => {
         message: "User created successfully",
         ...rest
       });
+    }
+    
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
