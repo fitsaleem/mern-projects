@@ -23,6 +23,7 @@ In this repo you will get all mern projects with cms
 install mongoose
 
 use this uri and change username and password with your actual database:
+
 const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true`;
 
 # for envirnment varialbe intall .env in root dir
