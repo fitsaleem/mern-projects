@@ -4,10 +4,10 @@
 import { Button, Navbar, TextInput , Dropdown ,Avatar } from 'flowbite-react';
 import { Link , useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
-import { LuSunMoon } from "react-icons/lu";
+import { LuSunMoon , LuSun} from "react-icons/lu";
 import { HiCog,  HiLogout, HiViewGrid , HiUser } from 'react-icons/hi';
-
-import { useSelector} from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
+import { changeTheme } from '../redux/themeContext/themeSlice';
 
 
 
@@ -16,6 +16,8 @@ function Header() {
 
   const path = useLocation().pathname;
   const {currentUser} = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
 
 
   return (
@@ -38,8 +40,10 @@ function Header() {
       
         
         <div  className='flex gap-2 md:order-2'>
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
-            <LuSunMoon />
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(changeTheme())}>
+           {
+              theme === "light" ? <LuSun/> : <LuSunMoon/>
+           }
         </Button>
         {
           currentUser ? (
