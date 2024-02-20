@@ -4,10 +4,14 @@
 import { Button, Navbar, TextInput , Dropdown ,Avatar } from 'flowbite-react';
 import { Link , useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
-import { LuSunMoon , LuSun} from "react-icons/lu";
 import { HiCog,  HiLogout, HiViewGrid , HiUser } from 'react-icons/hi';
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector} from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeTheme } from '../redux/themeContext/themeSlice';
+import { MdOutlineWbSunny } from "react-icons/md";
+import { FaMoon } from "react-icons/fa";
+
+
 
 
 
@@ -41,10 +45,11 @@ function Header() {
         
         <div  className='flex gap-2 md:order-2'>
         <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(changeTheme())}>
-           {
-              theme === "light" ? <LuSun/> : <LuSunMoon/>
-           }
-        </Button>
+  {
+    theme === "light" ? <FaMoon/> : <MdOutlineWbSunny />
+
+  }
+</Button>
         {
           currentUser ? (
             <Dropdown arrowIcon={false}
