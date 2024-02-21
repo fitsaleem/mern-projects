@@ -38,4 +38,8 @@ for api testing you can use postman api or also you can use Insomnia
 
 npm install bcryptjs
 
+# for handling cookies
+
+npm install cookie-parser
+
 

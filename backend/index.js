@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import cookieParser from "cookie-parser";
 
 
   dotenv.config();
@@ -23,8 +25,14 @@ const app= express();
 
 
 // Add  middleware
+
 app.use(express.json());
+app.use(cookieParser());
+
+
+// Add routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 
 
