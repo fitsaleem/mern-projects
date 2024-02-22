@@ -26,19 +26,24 @@ export const updateUser  = async (req, res) => {
         .status(400)
         .json("Username must be between 7 and 30 characters");
     }
-  }
+    if (req.body.username.includes(" ")) {
+      return res.status(400).json("Username cannot contain spaces");
+    }
+    if (req.body.username !== req.body.username.toLowerCase()) {
+      return res.status(400).json("Username can only contain lowercase letters");
+    }
 
-  if (req.body.username.includes(" ")) {
-    return res.status(400).json("Username cannot contain spaces");
+    if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+      return next(
+        res.status(400).json("Username can only contain letters and numbers")
+      );
+    }
   }
-  if (req.body.username !== req.body.username.toLowerCase()) {
-    return res.status(400).json("Username can only contain lowercase letters");
-  }
-  if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-    return next(
-      res.status(400).json("Username can only contain letters and numbers")
-    );
-  }
+  
+  
+
+ 
+ 
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
