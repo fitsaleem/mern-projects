@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { changeTheme } from '../redux/themeContext/themeSlice';
 import { MdOutlineWbSunny } from "react-icons/md";
 import { FaMoon } from "react-icons/fa";
+import { signoutSuccess } from '../redux/user/userSlice';
+
 
 
 
@@ -22,6 +24,22 @@ function Header() {
   const {currentUser} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
 
   return (
@@ -63,9 +81,11 @@ function Header() {
             </Dropdown.Header>
             <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
             <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+            <Link to={'dashboard?tab=profile'}>
             <Dropdown.Item icon={HiUser}>Profile</Dropdown.Item>
+            </Link>
             <Dropdown.Divider />
-            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+            <Dropdown.Item icon={HiLogout} onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>
           ) : (
             <Link to='/sign-in'>

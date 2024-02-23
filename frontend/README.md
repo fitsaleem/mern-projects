@@ -24,3 +24,12 @@ server :{
 # for google oauth we will use firebase
 
 npm install firebase
+
+
+# tailwind css plagin :
+
+npm install -D prettier prettier-plugin-tailwindcss
+
+# for ms word like editor we will use react quill libarary
+
+npm i react-quill

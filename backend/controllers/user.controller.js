@@ -68,3 +68,39 @@ export const updateUser  = async (req, res) => {
 // update user data end
 
 
+// Delete user data start
+
+
+export const deleteUser = async (req, res) => {
+
+  if (req.user.id !== req.params.userId) {
+    return res.status(403).json("You can only delete your account");
+  }
+
+  try {
+      await User.findByIdAndDelete(req.params.userId);
+      res.status(200).json("User has been deleted");
+
+
+  } catch (error) {
+     
+    res.status(500).json(error);
+  }
+
+}
+
+
+
+// sign out 
+
+export const signout  = (req, res) => {
+  res.clearCookie('access_token');
+  return res.status(200).json({
+    message: "User logged out successfully",
+  });
+}
+
+
+
+
+

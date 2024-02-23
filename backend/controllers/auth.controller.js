@@ -87,7 +87,7 @@ export const signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validUser._id , isAdmin: validUser.isAdmin}, process.env.JWT_SECRET);
 
     const { password: userPassword, ...rest } = validUser._doc;
 
@@ -143,7 +143,7 @@ export const google = async (req, res) => {
       });
 
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: newUser._id , isAdmin: validUser.isAdmin }, process.env.JWT_SECRET);
 
       const { password: userPassword, ...rest } = newUser._doc;
       return res
@@ -163,3 +163,5 @@ export const google = async (req, res) => {
     });
   }
 }
+
+

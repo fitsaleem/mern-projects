@@ -18,7 +18,12 @@ const userSchema = new mongoose.Schema({
 
       profilePicture :{
         type: String,
-        default: 'https://firebasestorage.googleapis.com/v0/b/mern-blog-app-dd9d6.appspot.com/o/1708540890540profile-icon-design-free-vector.jpg?alt=media&token=41651e4c-df4e-4881-ac16-14bc802c5a74',
+        default: 'https://firebasestorage.googleapis.com/v0/b/mern-blog-app-dd9d6.appspot.com/o/1708619212355profile-icon-design-free-vector.jpg?alt=media&token=f0d2aabb-1ac8-47de-8673-e50e2fa22d5f',
+      },
+
+      isAdmin: {
+        type: Boolean,
+        default: false
       },
       
       createdAt: {
