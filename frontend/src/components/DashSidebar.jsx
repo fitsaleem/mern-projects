@@ -2,14 +2,14 @@ import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiChartPie, HiUser } from "react-icons/hi";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
 const DashSidebar = () => {
   const location = useLocation();
-  // const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const [tab, settab] = useState("");
   const dispatch = useDispatch();
 
@@ -41,29 +41,53 @@ const DashSidebar = () => {
     <Sidebar aria-label="Default sidebar example" className="w-full md:w-56">
       <Sidebar.Items className="md:pt-10">
         <Sidebar.ItemGroup>
-          <Sidebar.Item
-            href="#"
-            icon={HiChartPie}
-            active={tab === "dash" || !tab}
-          >
-            Dashboard
-          </Sidebar.Item>
+         
 
-          <Sidebar.Item
+         {
+          currentUser.isAdmin && (
+            <Link  to="/dashboard?tab=dash">
+            <Sidebar.Item
+              href="#"
+              icon={HiChartPie}
+              active={tab === "dash" || !tab}
+              as="div"
+            >
+              Dashboard
+            </Sidebar.Item>
+            
+            </Link>
+          )
+         }
+
+         <Link to="/dashboard?tab=profile">
+         <Sidebar.Item
             href="#"
             icon={HiUser}
             active={tab === "profile"}
-            label={"User"}
+            label={currentUser.isAdmin ? "Admin" : "User"}
+            as="div"
           >
             Profile
           </Sidebar.Item>
+         
+         </Link>
+          {
+            currentUser.isAdmin && (
+              <Link to="/dashboard?tab=posts">
+
           <Sidebar.Item
             href="#"
             icon={MdOutlineLocalPostOffice}
             active={tab === "posts"}
+            as="div"
           >
             Posts
           </Sidebar.Item>
+          </Link>
+            )
+          }
+
+
           <Sidebar.Item href="#" icon={HiArrowSmRight} onClick={handleSignout}>
             Sign Out
           </Sidebar.Item>

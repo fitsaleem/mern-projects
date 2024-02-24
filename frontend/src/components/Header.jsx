@@ -1,16 +1,16 @@
 
-'use client';
 
 import { Button, Navbar, TextInput , Dropdown ,Avatar } from 'flowbite-react';
 import { Link , useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
-import { HiCog,  HiLogout, HiViewGrid , HiUser } from 'react-icons/hi';
+import {   HiLogout, HiViewGrid , HiUser, HiClipboardList } from 'react-icons/hi';
 import { useSelector} from "react-redux";
 import { useDispatch } from "react-redux";
 import { changeTheme } from '../redux/themeContext/themeSlice';
 import { MdOutlineWbSunny } from "react-icons/md";
 import { FaMoon } from "react-icons/fa";
 import { signoutSuccess } from '../redux/user/userSlice';
+import { useEffect ,useState } from 'react';
 
 
 
@@ -24,6 +24,7 @@ function Header() {
   const {currentUser} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
+  const [tab, settab] = useState("");
 
   const handleSignout = async () => {
     try {
@@ -40,6 +41,17 @@ function Header() {
       console.log(error.message);
     }
   }
+
+  // get url tab parameter
+
+  useEffect(() => {
+    const urlPrams = new URLSearchParams(location.search);
+    const tabFromUrl = urlPrams.get("tab");
+    if (tabFromUrl) {
+      settab(tabFromUrl);
+    }
+  }, [location.search]);
+
 
 
   return (
@@ -79,10 +91,26 @@ function Header() {
               <span className="block text-sm">{currentUser.username}</span>
               <span className="block truncate text-sm font-medium">{currentUser.email}</span>
             </Dropdown.Header>
-            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
-            <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
+            
+            {
+              currentUser.isAdmin &&(
+                <Link to="dashboard?tab=dash">
+            <Dropdown.Item icon={HiViewGrid} active={tab==="dash"} as="div">Dashboard</Dropdown.Item>
+            </Link>
+              )
+            }
+
+            {
+              currentUser.isAdmin &&(
+                <Link to="dashboard?tab=posts">
+            <Dropdown.Item icon={HiClipboardList} active={tab==="posts"} as="div">Posts</Dropdown.Item>
+            </Link>
+              )
+            }
+           
+      
             <Link to={'dashboard?tab=profile'}>
-            <Dropdown.Item icon={HiUser}>Profile</Dropdown.Item>
+            <Dropdown.Item icon={HiUser} as='div' active={tab === "profile"}>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
             <Dropdown.Item icon={HiLogout} onClick={handleSignout}>Sign out</Dropdown.Item>
