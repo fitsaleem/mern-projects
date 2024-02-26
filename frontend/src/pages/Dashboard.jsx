@@ -5,6 +5,7 @@ import DashProfile from "../components/DashProfile";
 import DashPosts from "../components/DashPosts";
 import { useSelector } from "react-redux";
 import AdminDash from "../components/AdminDash";
+import DashUsers from "../components/DashUsers";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -36,6 +37,12 @@ const Dashboard = () => {
 {
         currentUser.isAdmin && (
           tab === "dash" && <AdminDash/>
+        )
+      }
+
+{
+        currentUser.isAdmin && (
+          tab === "users" && <DashUsers/>
         )
       }
     </div>

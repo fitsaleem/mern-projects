@@ -134,6 +134,7 @@ export default function DashProfile() {
   };
   const handleDeleteUser = async () => {
     setShowModal(false);
+
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {

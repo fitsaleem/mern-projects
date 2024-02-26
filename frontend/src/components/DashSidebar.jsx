@@ -1,6 +1,6 @@
 import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiChartPie, HiUser } from "react-icons/hi";
-import { MdOutlineLocalPostOffice } from "react-icons/md";
+import { MdOutlineLocalPostOffice, MdOutlineSupervisedUserCircle } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -82,6 +82,22 @@ const DashSidebar = () => {
             as="div"
           >
             Posts
+          </Sidebar.Item>
+          </Link>
+            )
+          }
+
+{
+            currentUser.isAdmin && (
+              <Link to="/dashboard?tab=users">
+
+          <Sidebar.Item
+            href="#"
+            icon={MdOutlineSupervisedUserCircle}
+            active={tab === "users"}
+            as="div"
+          >
+            Users
           </Sidebar.Item>
           </Link>
             )
