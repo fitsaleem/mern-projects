@@ -15,6 +15,11 @@ const CommentSection = ({postId}) => {
     if (comment.length > 200) {
       return;
     }
+
+    if (!comment) {
+      setCommentError('Comment is required');
+      return;
+    }
    
     try {
       const res = await fetch(`/api/comment/create`, {
@@ -31,7 +36,7 @@ const CommentSection = ({postId}) => {
 
       const data = await res.json();
       if (res.ok) {
-        setComment(data);
+        setComment("");
         setCommentError(null);
       }
 

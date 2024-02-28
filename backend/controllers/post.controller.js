@@ -45,7 +45,7 @@ export const getposts = async (req, res, next) => {
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
-      ...(req.query.postSlug && { slug: req.query.postSlug }), // Updated to postSlug
+      ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
@@ -61,6 +61,7 @@ export const getposts = async (req, res, next) => {
     const totalPosts = await Post.countDocuments();
 
     const now = new Date();
+
     const oneMonthAgo = new Date(
       now.getFullYear(),
       now.getMonth() - 1,

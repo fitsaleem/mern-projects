@@ -35,7 +35,7 @@ const App = () => {
     
     <Route path="/sign-in" element={<SignIn/>}/>
     <Route path="/sign-up" element={<SignUp/>}/>
-    <Route path="/post/:slug" element={<PostDetail/>}/>
+    <Route path="/post/:postSlug" element={<PostDetail/>}/>
    </Routes>
    <Footer/>
    </BrowserRouter>
