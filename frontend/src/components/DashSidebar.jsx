@@ -6,6 +6,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { LiaCommentSolid } from "react-icons/lia";
+
 
 const DashSidebar = () => {
   const location = useLocation();
@@ -98,6 +100,22 @@ const DashSidebar = () => {
             as="div"
           >
             Users
+          </Sidebar.Item>
+          </Link>
+            )
+          }
+
+{
+            currentUser.isAdmin && (
+              <Link to="/dashboard?tab=comments">
+
+          <Sidebar.Item
+            href="#"
+            icon={LiaCommentSolid }
+            active={tab === "comments"}
+            as="div"
+          >
+            Comments
           </Sidebar.Item>
           </Link>
             )

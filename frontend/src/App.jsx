@@ -12,12 +12,15 @@ import CreatePost from "./pages/CreatePost"
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute"
 import UpdatePost from "./pages/UpadtePost"
 import PostDetail from "./pages/PostDetail"
+import ScrollToTop from "./components/ScrollToTop"
+import Search from "./pages/Search"
 
 
 
 const App = () => {
   return (
    <BrowserRouter>
+   <ScrollToTop/>
    <Header/>
    <Routes>
     <Route path="/" element={<Home/>}/>
@@ -36,6 +39,7 @@ const App = () => {
     <Route path="/sign-in" element={<SignIn/>}/>
     <Route path="/sign-up" element={<SignUp/>}/>
     <Route path="/post/:postSlug" element={<PostDetail/>}/>
+    <Route path="/search" element={<Search/>}/>
    </Routes>
    <Footer/>
    </BrowserRouter>
