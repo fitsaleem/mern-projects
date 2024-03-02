@@ -42,4 +42,10 @@ npm install bcryptjs
 
 npm install cookie-parser
 
+# for deploy you mern app configure some script in root package.json:
+
+"build": "npm install && npm install --prefix frontend && npm run build --prefix backend"
+
+
+
 

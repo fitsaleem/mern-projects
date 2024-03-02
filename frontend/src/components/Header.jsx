@@ -1,7 +1,7 @@
 
 
 import { Button, Navbar, TextInput , Dropdown ,Avatar } from 'flowbite-react';
-import { Link , useLocation} from 'react-router-dom';
+import { Link , useNavigate, useLocation} from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
 import {   HiLogout, HiViewGrid , HiUser, HiClipboardList } from 'react-icons/hi';
 import { useSelector} from "react-redux";
@@ -18,6 +18,7 @@ import { useEffect ,useState } from 'react';
 
 
 
+
 function Header() {
 
   const path = useLocation().pathname;
@@ -25,6 +26,9 @@ function Header() {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
   const [tab, settab] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleSignout = async () => {
     try {
@@ -52,6 +56,17 @@ function Header() {
     }
   }, [location.search]);
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const urlPrams = new URLSearchParams(location.search);
+    urlPrams.set("searchTerm", searchTerm);
+    const searchQuery = urlPrams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
 
 
   return (
@@ -63,8 +78,8 @@ function Header() {
           Blog
       </Link>
 
-      <form>
-      <TextInput className='hidden lg:inline' placeholder='Search' rightIcon={CiSearch}/>
+      <form onSubmit={handleSearchSubmit}>
+      <TextInput className='hidden lg:inline' placeholder='Search' rightIcon={CiSearch} onChange={handleSearchChange}/>
       </form>
 
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
