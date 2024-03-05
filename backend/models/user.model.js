@@ -16,6 +16,26 @@ const userSchema = new mongoose.Schema({
         required: true
       },
 
+      resetPasswordToken: {
+        type: String,
+        default: null
+      },
+
+      resetPasswordExpire: {
+        type: Date,
+        default: null
+      },
+
+      emailVerificationToken: {
+        type: String,
+        default: null
+      },
+
+      emailVerified: {
+        type: Boolean,
+        default: false
+      },
+
       profilePicture :{
         type: String,
         default: 'https://firebasestorage.googleapis.com/v0/b/mern-blog-app-dd9d6.appspot.com/o/1708619212355profile-icon-design-free-vector.jpg?alt=media&token=f0d2aabb-1ac8-47de-8673-e50e2fa22d5f',

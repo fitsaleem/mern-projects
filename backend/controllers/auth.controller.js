@@ -1,6 +1,9 @@
 import User from "../models/user.model.js";
 import bcrypt  from "bcryptjs";
 import jwt from 'jsonwebtoken';
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+
 
 
 export const signup = async (req, res) => {
@@ -41,12 +44,16 @@ export const signup = async (req, res) => {
       username,
       email,
       password : hashedPassword,
+      emailVerificationToken: crypto.randomBytes(20).toString('hex'),
+      emailVerified: false,
     });
 
     await newUser.save();
 
+    await sendVerificationEmail(newUser.email, newUser.emailVerificationToken , req);
+
     return res.status(201).json({
-      message: "User created successfully",
+      message: "User created successfully. Please verify your email.",
     });
   } catch (error) {
     return res.status(500).json({
@@ -54,6 +61,34 @@ export const signup = async (req, res) => {
         })
   }
 };
+
+async function sendVerificationEmail(email, token , req) {
+  try {
+     const transporter = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
+       auth: {
+         user: process.env.EMAIL_USERNAME,
+         pass: process.env.EMAIL_PASSWORD,
+       },
+     });
+ 
+     const mailOptions = {
+       to: email,
+       from: process.env.EMAIL_USERNAME,
+       subject: "Email Verification",
+       text: `Please verify your email by clicking the following link:\n\nhttp://${req.headers.host}/verify-email/${token}\n\n`,
+     };
+ 
+     await transporter.sendMail(mailOptions);
+  } catch (error) {
+     console.error('Error sending verification email:', error);
+     // Optionally, you can throw the error to be caught by the calling function
+     throw error;
+  }
+ }
+ 
+
 
 
 
@@ -68,6 +103,8 @@ export const signin = async (req, res) => {
       message: "All fields are required",
     });
   }
+
+  
   
 
   try {
@@ -76,6 +113,12 @@ export const signin = async (req, res) => {
     if (!validUser) {
       return res.status(400).json({
         message: "User does not exist",
+      });
+    }
+
+    if (!validUser.emailVerified) {
+      return res.status(400).json({
+        message: "Please verify your email before logging in.",
       });
     }
 
@@ -140,6 +183,7 @@ export const google = async (req, res) => {
         email,
         password: hashedPassword,
         profilePicture: googlePhotoUrl,
+        emailVerified: true,
       });
 
       await newUser.save();
@@ -165,3 +209,107 @@ export const google = async (req, res) => {
 }
 
 
+// forgot password  controller
+
+
+export const forgotPassword = async (req, res) => {
+  
+  const {email}= req.body;
+
+  try {
+
+    const user = await User.findOne({email});
+    if(!user){
+      return res.status(400).json({ message: "No account with that email address exists." });
+    }
+
+    user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordExpire = Date.now() + 3600000; // 1 hour
+
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD
+      }
+  });
+
+  const mailOptions = {
+    to : user.email,
+    from: process.env.EMAIL_USERNAME,
+    subject: 'Password Reset',
+    text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\nhttp://${req.headers.host}/reset/${user.resetPasswordToken}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`
+        };
+
+        transporter.sendMail(mailOptions, function(err) {
+          if (err) {
+              return res.status(500).json({ message: 'Error sending email' });
+          }
+          res.status(200).json({ message: 'An e-mail has been sent to ' + user.email + ' with further instructions.' });
+      });
+    
+  } catch (error) {
+    return res.status(500).json({message : "Internal server error"});
+  }
+
+
+
+}
+
+
+// reset password controller
+
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpire: { $gt: Date.now() } });
+
+    if (!user) {
+      return res.status(400).json({ message: "Password reset token is invalid." });
+  }
+  
+  if (Date.now() > user.resetPasswordExpire) {
+      return res.status(400).json({ message: "Password reset token is expired." });
+  }
+  
+
+    user.password = bcrypt.hashSync(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: "Password has been reset successfully." });
+} catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+}
+};
+
+
+// verify email controller
+
+export const verifyEmail = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+      const user = await User.findOne({ emailVerificationToken: token });
+
+      if (!user) {
+          return res.status(400).json({ message: "Email verification token is invalid." });
+      }
+
+      user.emailVerified = true;
+      user.emailVerificationToken = undefined;
+
+      await user.save();
+
+      res.status(200).json({ message: "Email has been verified successfully." });
+  } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+  }
+};
