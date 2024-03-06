@@ -14,7 +14,9 @@ import UpdatePost from "./pages/UpadtePost"
 import PostDetail from "./pages/PostDetail"
 import ScrollToTop from "./components/ScrollToTop"
 import Search from "./pages/Search"
-import ForgetPassword from "./pages/ForgetPassword"
+import ForgotPassword from "./pages/ForgotPassword"
+import VerifyEmail from "./pages/VerifyEmail"
+import ResetPassword from "./pages/ResetPassword"
 
 
 
@@ -40,7 +42,9 @@ const App = () => {
     
     <Route path="/sign-in" element={<SignIn/>}/>
     <Route path="/sign-up" element={<SignUp/>}/>
-    <Route path="/forgot-password" element={<ForgetPassword/>}/>
+    <Route path="/forgot-password" element={<ForgotPassword/>}/>
+    <Route path="/verify-email" element={<VerifyEmail/>} />
+    <Route path="/reset-password/:token" element={<ResetPassword/>} />
     <Route path="/post/:postSlug" element={<PostDetail/>}/>
     <Route path="/search" element={<Search/>}/>
    </Routes>

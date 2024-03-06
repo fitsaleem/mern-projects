@@ -7,7 +7,7 @@ import { signInStart, signInSuccess ,signInFailure } from "../redux/user/userSli
 import { useDispatch, useSelector} from "react-redux";
 import OAuth from "../components/OAuth";
 
-const SignUp = () => {
+const SignIn = () => {
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
@@ -107,6 +107,14 @@ const SignUp = () => {
             <Link to="/sign-up" className="text-blue-500">
               Sign Up
             </Link>
+            
+          </div>
+          <div className="flex gap-2 text-sm mt-5">
+            
+            <span>Forgot the Password?</span>
+            <Link to="/forgot-password" className="text-blue-500">
+              Forget Password
+            </Link>
           </div>
           {messageError && <Alert className="mt-5" color="failure">{messageError}</Alert>}
         </div>
@@ -115,4 +123,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
