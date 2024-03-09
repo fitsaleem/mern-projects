@@ -12,71 +12,71 @@ const userSlice = createSlice({
     reducers: {
       signInStart: (state) => {
         state.loading = true;
-        state.error = null;
+        state.messageError = null;
       },
       signInSuccess: (state, action) => {
         state.currentUser = action.payload;
         state.loading = false;
-        state.error = null;
+        state.messageError = null;
       },
       signInFailure: (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.messageError = action.payload;
       },
       updateStart: (state) => {
         state.loading = true;
-        state.error = null;
+        state.messageError = null;
       },
       updateSuccess: (state, action) => {
         state.currentUser = action.payload;
         state.loading = false;
-        state.error = null;
+        state.messageError = null;
       },
       updateFailure: (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.messageError = action.payload;
       },
       deleteUserStart: (state) => {
         state.loading = true;
-        state.error = null;
+        state.messageError = null;
       },
       deleteUserSuccess: (state) => {
         state.currentUser = null;
         state.loading = false;
-        state.error = null;
+        state.messageError = null;
       },
       deleteUserFailure: (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.messageError = action.payload;
       },
       signoutSuccess: (state) => {
         state.currentUser = null;
-        state.error = null;
+        state.messageError = null;
         state.loading = false;
       },
       forgotPasswordStart: (state) => {
         state.loading = true;
-        state.error = null;
+        state.messageError = null;
       },
       forgotPasswordSuccess: (state) => {
         state.loading = false;
-        state.error = null;
+        state.messageError = null;
       },
       forgotPasswordFailure: (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.messageError = action.payload;
       },
       resetPasswordStart: (state) => {
         state.loading = true;
-        state.error = null;
+        state.messageError = null;
       },
       resetPasswordSuccess: (state) => {
         state.loading = false;
-        state.error = null;
+        state.messageError = null;
       },
       resetPasswordFailure: (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.messageError = action.payload;
       },
     },
   });

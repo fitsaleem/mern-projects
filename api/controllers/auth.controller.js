@@ -3,18 +3,18 @@ import bcrypt  from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import {errorHandler} from "../utils/error.js";
 
 
 
-export const signup = async (req, res) => {
+export const signup = async (req, res , next) => {
   const { username, email, password } = req.body;
 
   try {
 
     if (!username || !email || !password || username === "" || email === "" || password === "") {
-        return res.status(400).json({
-            message: "All fields are required",
-        });
+
+      return next(errorHandler(400, "All fields are required"));
         }
 
         if (password.length < 6) {
@@ -63,6 +63,7 @@ export const signup = async (req, res) => {
 };
 
 async function sendVerificationEmail(email, token , req) {
+
   try {
      const transporter = nodemailer.createTransport({
       host: "sandbox.smtp.mailtrap.io",
@@ -83,7 +84,6 @@ async function sendVerificationEmail(email, token , req) {
      await transporter.sendMail(mailOptions);
   } catch (error) {
      console.error('Error sending verification email:', error);
-     // Optionally, you can throw the error to be caught by the calling function
      throw error;
   }
  }
@@ -94,18 +94,13 @@ async function sendVerificationEmail(email, token , req) {
 
 
 
-export const signin = async (req, res) => {
+export const signin = async (req, res , next) => {
   
   const { email, password } = req.body;
 
   if (!email || !password || email === "" || password === "") {
-    return res.status(400).json({
-      message: "All fields are required",
-    });
+    return next(errorHandler(400, "All fields are required"));
   }
-
-  
-  
 
   try {
     const validUser = await User.findOne({ email });
