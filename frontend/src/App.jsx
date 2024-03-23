@@ -44,7 +44,7 @@ const App = () => {
     <Route path="/sign-up" element={<SignUp/>}/>
     <Route path="/forgot-password" element={<ForgotPassword/>}/>
     <Route path="/verify-email/:token" element={<VerifyEmail/>} />
-    <Route path="/reset-password/:token" element={<ResetPassword/>} />
+    <Route path="/reset/:token" element={<ResetPassword/>} />
     <Route path="/post/:postSlug" element={<PostDetail/>}/>
     <Route path="/search" element={<Search/>}/>
    </Routes>

@@ -1,15 +1,19 @@
 // src/components/ResetPassword.js
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
  const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
  const [message, setMessage] = useState('');
 
+ const { token } = useParams();
+ 
+
  const handleSubmit = async (e) => {
     e.preventDefault();
     // Replace with your API endpoint
-    const response = await fetch('/api/auth/reset-password', {
+    const response = await fetch(`/api/auth/reset/${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
